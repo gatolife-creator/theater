@@ -3,7 +3,7 @@ import path from "path";
 import { router as videoRouter } from "./api/videos";
 
 const app = express();
-const port = 3001;
+const port = 1234;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
