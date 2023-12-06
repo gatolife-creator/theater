@@ -82,7 +82,7 @@ export const Gallery = () => {
         {videos.map(([id, title], index) => (
           <div
             key={index}
-            className="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-200 ease-in relative"
+            className="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in relative  hover:text-gray-500"
           >
             <button
               className="btn btn-error absolute top-0 right-0"
@@ -96,9 +96,7 @@ export const Gallery = () => {
                 className="w-full h-40 object-cover"
               />
               <div className="p-2">
-                <div className="text-sm font-bold hover:text-gray-500">
-                  {title}
-                </div>
+                <div className="text-sm font-bold">{title}</div>
               </div>
             </Link>
           </div>
