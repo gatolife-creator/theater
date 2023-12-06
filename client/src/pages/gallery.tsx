@@ -49,11 +49,11 @@ export const Gallery = () => {
 
   return (
     <Main>
-      <div className="mx-auto text-center mb-5">
+      <div className="mx-auto mb-5 text-center">
         <input
           type="text"
           placeholder="Type here"
-          className="input input-bordered input-primary w-full max-w-xs mr-2"
+          className="input input-bordered input-primary mr-2 w-full max-w-xs"
           onChange={(e) => {
             setDownloadId(e.target.value);
           }}
@@ -82,10 +82,10 @@ export const Gallery = () => {
         {videos.map(([id, title], index) => (
           <div
             key={index}
-            className="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in relative  hover:text-gray-500"
+            className="relative overflow-hidden rounded-lg border shadow-lg transition-shadow duration-300 ease-in hover:text-gray-500  hover:shadow-xl"
           >
             <button
-              className="btn btn-error absolute top-0 right-0"
+              className="btn btn-error absolute right-0 top-0"
               onClick={() => handleDeleteClick(id)}
             >
               <ImBin className="text-lg" />
@@ -93,7 +93,7 @@ export const Gallery = () => {
             <Link to={`/theater?watch=${id}`}>
               <img
                 src={`/api/thumbnail?id=${id}`}
-                className="w-full h-40 object-cover"
+                className="h-40 w-full object-cover"
               />
               <div className="p-2">
                 <div className="text-sm font-bold">{title}</div>
@@ -104,10 +104,10 @@ export const Gallery = () => {
       </div>
 
       {modalOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg text-center">
+        <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50">
+          <div className="rounded-lg bg-white p-8 text-center">
             <p>本当に削除しますか？</p>
-            <div className="flex justify-center mt-4 gap-2">
+            <div className="mt-4 flex justify-center gap-2">
               <button className="btn btn-neutral" onClick={handleDeleteCancel}>
                 キャンセル
               </button>
