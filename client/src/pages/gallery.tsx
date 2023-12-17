@@ -41,6 +41,7 @@ export const Gallery = () => {
     setProcessing(true);
     await downloadVideo(downloadId);
     setProcessing(false);
+    setDownloadId("");
   };
 
   useEffect(() => {
@@ -57,7 +58,7 @@ export const Gallery = () => {
           onChange={(e) => {
             setDownloadId(e.target.value);
           }}
-          defaultValue={downloadId}
+          value={downloadId}
         />
         <button
           className="btn btn-primary"

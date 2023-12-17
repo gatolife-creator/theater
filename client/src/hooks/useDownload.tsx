@@ -26,6 +26,7 @@ export const useDownload = () => {
       },
       body: JSON.stringify({ url }),
     });
+    console.log("completed");
   };
 
   return { downloadVideo, progress };
