@@ -10,7 +10,7 @@ import { useDownload } from "../hooks/useDownload";
 export const Gallery = () => {
   const { videos, getVideos } = useVideos();
   const { deleteVideo } = useDelete();
-  const { downloadVideo } = useDownload();
+  const { downloadVideo, progress } = useDownload();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [videoToDelete, setVideoToDelete] = useState<string | null>(null);
@@ -76,6 +76,15 @@ export const Gallery = () => {
             />
           )}
         </button>
+        {processing && (
+          <div className="mx-auto mb-5 text-center">
+            <progress
+              className="progress w-full max-w-xs"
+              value={progress}
+              max="100"
+            />
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-4 gap-4">

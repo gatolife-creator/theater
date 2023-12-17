@@ -1,11 +1,13 @@
 import express from "express";
 import path from "path";
-import { execSync } from "child_process";
+import { execSync, spawn } from "child_process";
 import fs from "fs";
+import { Server as IOServer } from "socket.io";
 
 import { Database } from "../utils/database";
 
 const router = express.Router();
+let io: IOServer;
 
 const videosDirectory = path.join(__dirname, "../videos");
 const imagesDirectory = path.join(__dirname, "../images");
@@ -25,9 +27,12 @@ router.post(
     await downloadVideo(req, res);
   }
 );
-router.delete("/delete", async (req: express.Request, res: express.Response) => {
-  await deleteVideo(req, res);
-});
+router.delete(
+  "/delete",
+  async (req: express.Request, res: express.Response) => {
+    await deleteVideo(req, res);
+  }
+);
 router.get(
   "/thumbnail",
   async (req: express.Request, res: express.Response) => {
@@ -83,8 +88,31 @@ function getVideoTitle(id: string) {
   return execSync(`yt-dlp ${id} --get-title`).toString();
 }
 
-async function downloadVideos(id: string) {
-  execSync(`cd ${videosDirectory} && yt-dlp ${id} -o ${id}.mp4 -f mp4`);
+async function downloadVideos(id: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    console.log("Downloading video");
+    const download = spawn(
+      "yt-dlp",
+      [`${id}`, "-o", `${id}.mp4`, "-f", "mp4"],
+      {
+        cwd: videosDirectory,
+      }
+    );
+
+    download.stdout.on("data", (chunk) => {
+      const progress = calculateProgress(chunk.toString());
+      io.emit("progress", { progress });
+    });
+
+    download.on("close", (code) => {
+      if (code !== 0) {
+        console.log(`yt-dlp process exited with code ${code}`);
+      } else {
+        console.log("Download completed");
+        resolve();
+      }
+    });
+  });
 }
 
 async function downloadThumbnail(id: string) {
@@ -105,7 +133,6 @@ async function deleteVideo(req: express.Request, res: express.Response) {
     const id = req.body.id;
     database.deleteVideo(id);
     fs.rmSync(`${videosDirectory}/${id}.mp4`);
-    fs.rmSync(`${imagesDirectory}/${id}.webp`);
     saveDatabase();
     res.status(200).end();
   } catch (error) {
@@ -122,6 +149,16 @@ async function getThumbnail(req: express.Request, res: express.Response) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
+}
+
+function calculateProgress(chunk: Buffer): number {
+  const output = chunk.toString();
+  const match = output.match(/(\d+(\.\d+)?)%/);
+  return match ? parseFloat(match[1]) : 0;
+}
+
+export function setIO(serverIO: IOServer) {
+  io = serverIO;
 }
 
 export { router };
