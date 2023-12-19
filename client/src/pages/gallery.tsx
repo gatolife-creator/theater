@@ -115,7 +115,7 @@ export const Gallery = () => {
       </div>
 
       {modalOpen && (
-        <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50 backdrop-blur">
           <div className="rounded-lg bg-white p-8 text-center">
             <p>本当に削除しますか？</p>
             <div className="mt-4 flex justify-center gap-2">
