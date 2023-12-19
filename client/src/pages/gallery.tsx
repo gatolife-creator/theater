@@ -38,6 +38,7 @@ export const Gallery = () => {
   };
 
   const handleDownloadClick = async () => {
+    if (downloadId === "") return;
     setProcessing(true);
     await downloadVideo(downloadId);
     setProcessing(false);
@@ -50,18 +51,18 @@ export const Gallery = () => {
 
   return (
     <Main>
-      <div className="mx-auto mb-5 text-center">
+      <div className="mx-auto mb-5 text-center sm:flex sm:justify-center">
         <input
           type="text"
           placeholder="Type here"
-          className="input input-bordered input-primary mr-2 w-full max-w-xs"
+          className="input input-bordered input-primary mr-2 max-w-xs sm:w-full"
           onChange={(e) => {
             setDownloadId(e.target.value);
           }}
           value={downloadId}
         />
         <button
-          className="btn btn-primary"
+          className="btn btn-primary mt-2 sm:ml-2 sm:mt-0"
           onClick={async () => {
             await handleDownloadClick();
           }}
@@ -73,7 +74,7 @@ export const Gallery = () => {
               secondaryColor="transparent"
               width="1rem"
               height="1rem"
-              wrapperStyle={{ margin: "0 auto" }}
+              wrapperClass="mx-auto"
             />
           )}
         </button>
